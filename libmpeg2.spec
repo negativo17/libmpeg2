@@ -1,6 +1,6 @@
 Name:           libmpeg2
 Version:        0.5.1
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        MPEG-2 decoder libraries
 License:        GPLv2+
 URL:            http://libmpeg2.sourceforge.net/
@@ -19,7 +19,6 @@ libmpeg2 is a free library for decoding MPEG-2 and MPEG-1 video streams.
 
 %package -n     mpeg2dec
 Summary:        MPEG-2 decoder program
-Requires:       %{name} = %{version}-%{release}
 
 %description -n mpeg2dec
 mpeg2dec is a test program for %{name}. It decodes MPEG-1 and MPEG-2 video
@@ -30,7 +29,7 @@ The main purpose of mpeg2dec is to have a simple test bed for %{name}.
 
 %package        devel
 Summary:        Development files for %{name}
-Requires:       %{name} = %{version}-%{release}
+Requires:       %{name}%{_isa} = %{version}-%{release}
 Requires:       pkgconfig
 
 %description    devel
@@ -53,7 +52,7 @@ autoreconf -vif
 %configure \
     --disable-static \
 %ifarch ppc
-  --disable-accel-detect \
+    --disable-accel-detect \
 %endif
 
 make %{?_smp_mflags} \
@@ -64,18 +63,15 @@ make %{?_smp_mflags} \
 %endif
 
 %install
-make install DESTDIR=%{buildroot} INSTALL="install -p"
+%make_install
 find %{buildroot} -name '*.la' -delete
 
 # Fix datatype internal definitions
 install -pm 0644 libmpeg2/mpeg2_internal.h %{buildroot}%{_includedir}/mpeg2dec/
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets
 
 %files
-%{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc AUTHORS ChangeLog NEWS README TODO
 %{_libdir}/*.so.*
@@ -94,6 +90,9 @@ install -pm 0644 libmpeg2/mpeg2_internal.h %{buildroot}%{_includedir}/mpeg2dec/
 %{_libdir}/pkgconfig/libmpeg2convert.pc
 
 %changelog
+* Sat Apr 28 2018 Simone Caronni <negativo17@gmail.com> - 0.5.1-13
+- SPEC file cleanup.
+
 * Wed May 25 2016 Simone Caronni <negativo17@gmail.com> - 0.5.1-12
 - SPEC file cleanup.
 - Add license macro.

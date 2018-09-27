@@ -1,6 +1,6 @@
 Name:           libmpeg2
 Version:        0.5.1
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        MPEG-2 decoder libraries
 License:        GPLv2+
 URL:            http://libmpeg2.sourceforge.net/
@@ -9,6 +9,7 @@ Source0:        http://libmpeg2.sourceforge.net/files/%{name}-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake
+BuildRequires:  gcc
 BuildRequires:  SDL-devel
 BuildRequires:  libtool
 BuildRequires:  libXt-devel
@@ -37,7 +38,7 @@ The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
 
 %prep
-%setup -q
+%autosetup
 iconv -f ISO-8859-1 -t UTF-8 AUTHORS > AUTHORS.tmp
 touch -r AUTHORS AUTHORS.tmp 
 cp -p -f AUTHORS.tmp AUTHORS
@@ -90,6 +91,9 @@ install -pm 0644 libmpeg2/mpeg2_internal.h %{buildroot}%{_includedir}/mpeg2dec/
 %{_libdir}/pkgconfig/libmpeg2convert.pc
 
 %changelog
+* Thu Sep 27 2018 Simone Caronni <negativo17@gmail.com> - 0.5.1-14
+- Add GCC build requirement.
+
 * Sat Apr 28 2018 Simone Caronni <negativo17@gmail.com> - 0.5.1-13
 - SPEC file cleanup.
 
